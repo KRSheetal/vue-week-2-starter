@@ -53,8 +53,8 @@
                     <!-- TODO Create select element, use v-model to connect to the types -->
 
                     <!-- Use v-for to create option elements, one for each type -->
-                    <select class="form-control" v-model="type">
-                        <option v-for="activityType in types">{{ activityType }}</option>
+                    <select class="form-control" v-model="type"  >
+                        <option v-for="activityType in types" >{{ activityType }}</option>
                     </select>
                 </div>
 
@@ -75,8 +75,14 @@
                 </div>
 
                 <!-- TODO When the user adds a new record, include the completed value, as a boolean.note string  -->
-                <div class>
+                <div class="form-check">
+                    <input id="completedTask" class="form-check-input" type="checkbox" value="boolean">
+                    <label class="form-check-label" for="completedTask">Completed?</label>
+                </div>
 
+                <div class="form-group">
+                    <label for="notes">Notes:</label>
+                    <input id="notes" class="form-control" v-model="notes">
                 </div>
 
                 <div>
@@ -101,19 +107,19 @@
                             <th>How many hours?</th>
                             <th>Type</th>
                             <th>Media</th>
-                            <!-- TODO When the user adds a new record, include the completed value, as a boolean.note string  -->
                             <th>Completed</th>
                             <th>Notes</th>
+
                         </tr>
                         <!-- use v-for to create one table row for each activity record -->
-                        <tr v-for="record in activityRecords">
+                        <tr v-for="record in activityRecords" v-bind:class="{Sketching: record.Sketching, Drawing: record.Drawing, Painting:record.Painting}" >
                             <td>{{ shortDate(record.date) }}</td>
                             <td>{{ record.hours }}</td>
                             <td>{{ record.type }}</td>
                             <td>{{ record.medium }}</td>
-                            <!-- TODO When the user adds a new record, include the completed value, as a boolean.note string  -->
-                            <td>{{ }}</td>
-                            <td>{{ }}</td>
+                            <td>{{ record.completed }}</td>
+                            <td>{{record.notes }}</td>
+
                         </tr>
                     </table>
                 </div>
@@ -157,6 +163,8 @@
 
                 //used with the select-option choices
                 types: ['Sketching', 'Drawing', 'Painting'],
+                completed: true,
+                notes: '',
 
                 errors: []
             }

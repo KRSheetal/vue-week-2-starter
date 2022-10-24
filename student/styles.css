@@ -19,7 +19,14 @@ th, tr {
     background-color: darkmagenta ;
 }
 
+
+
 [v-cloak] {
     display: none;
 }
 
+.Sketching {
+    color: darkolivegreen;
+    font-weight: bold;
+    background-color: white ;
+}
