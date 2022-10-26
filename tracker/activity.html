@@ -76,7 +76,7 @@
 
                 <!-- TODO When the user adds a new record, include the completed value, as a boolean.note string  -->
                 <div class="form-check">
-                    <input id="completedTask" class="form-check-input" type="checkbox" value="boolean">
+                    <input id="completedTask" class="form-check-input" type="checkbox" value="boolean.note" v-model="completed">
                     <label class="form-check-label" for="completedTask">Completed?</label>
                 </div>
 
@@ -112,13 +112,13 @@
 
                         </tr>
                         <!-- use v-for to create one table row for each activity record -->
-                        <tr v-for="record in activityRecords" v-bind:class="{Sketching: record.Sketching, Drawing: record.Drawing, Painting:record.Painting}" >
+                        <tr v-for="record in activityRecords" v-bind:class="{{record.type}}">
                             <td>{{ shortDate(record.date) }}</td>
                             <td>{{ record.hours }}</td>
-                            <td>{{ record.type }}</td>
+                            <td>{{ completedOrNot(record.type) }} </td>
                             <td>{{ record.medium }}</td>
                             <td>{{ record.completed }}</td>
-                            <td>{{record.notes }}</td>
+                            <td>{{ record.notes }}</td>
 
                         </tr>
                     </table>
@@ -163,7 +163,7 @@
 
                 //used with the select-option choices
                 types: ['Sketching', 'Drawing', 'Painting'],
-                completed: true,
+                completed:'',
                 notes: '',
 
                 errors: []
@@ -198,7 +198,9 @@
                         date: date,
                         hours: this.hours,
                         type: this.type,
-                        medium: this.medium
+                        medium: this.medium,
+                        completed: this.completed,
+                        notes: this.notes
                     }
                     this.activityRecords.push(record)
 
@@ -214,6 +216,18 @@
             shortDate(date) {
                 //shorten the date to readable format
                 return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
+            },
+
+            sketchOrDrawOrPaint(record){
+
+            },
+
+            completedOrNot(type) {
+                if (this.type){
+                    return 'Completed'
+                } else {
+                    return 'Not Completed'
+                }
             }
         },
         computed: {

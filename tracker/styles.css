@@ -2,3 +2,21 @@
     max-height: 250px;
     overflow: scroll;
 }
+
+.Sketching {
+    color: darkolivegreen;
+    font-weight: normal;
+    background-color: hotpink;
+}
+
+.drawing{
+    color: darkolivegreen;
+    font-weight: normal;
+    background-color: blueviolet;
+}
+
+.painting{
+    color: darkolivegreen;
+    font-weight: normal;
+    background-color: darkmagenta;
+}
