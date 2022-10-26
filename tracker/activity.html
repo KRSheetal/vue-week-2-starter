@@ -50,7 +50,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="type">What type?</label>
-                    <!-- TODO Create select element, use v-model to connect to the types -->
+                    <!-- Create select element, use v-model to connect to the types -->
 
                     <!-- Use v-for to create option elements, one for each type -->
                     <select class="form-control" v-model="type"  >
@@ -74,12 +74,13 @@
                     <label class="form-check-label" for="media2">Digital</label>
                 </div>
 
-                <!-- TODO When the user adds a new record, include the completed value, as a boolean.note string  -->
+                <!-- When the user adds a new record, include the completed value, as a boolean.note string  -->
                 <div class="form-check">
                     <input id="completedTask" class="form-check-input" type="checkbox" value="boolean.note" v-model="completed">
                     <label class="form-check-label" for="completedTask">Completed?</label>
                 </div>
 
+                <!--Add another text input or textarea to the form for the user to enter a note about a record.-->
                 <div class="form-group">
                     <label for="notes">Notes:</label>
                     <input id="notes" class="form-control" v-model="notes">
@@ -101,7 +102,8 @@
                 <h3> {{ totalRecords }} </h3>
 
                 <div id="records">
-                    <table class="table table-hover">
+                    <table class="table"> <!-- <table class="table" table hover> --- for hovering -->
+                    <!--   -->
                         <tr>
                             <th>Date</th>
                             <th>How many hours?</th>
@@ -112,13 +114,13 @@
 
                         </tr>
                         <!-- use v-for to create one table row for each activity record -->
-                        <tr v-for="record in activityRecords" v-bind:class="{{record.type}}">
+                        <tr v-for="record in activityRecords" v-bind:class="record.type">
                             <td>{{ shortDate(record.date) }}</td>
                             <td>{{ record.hours }}</td>
-                            <td>{{ completedOrNot(record.type) }} </td>
+                            <td>{{ record.type }} </td>
                             <td>{{ record.medium }}</td>
-                            <td>{{ record.completed }}</td>
-                            <td>{{ record.notes }}</td>
+                            <td>{{ completedOrNot(record.completed) }}</td>
+                            <td>{{ notesShorten(record.notes) }}</td>
 
                         </tr>
                     </table>
@@ -134,8 +136,8 @@
 
                 <!-- add computed property to calculate the total hours -->
                 <p>You have practiced a total of {{ totalHours }} </p>
-
-                <!-- Challenge question! Display a list of the total hours for each type.  -->
+                <!-- TODO Challenge question! Display a list of the total hours for each type.  -->
+<!--                <p>You have spent {{sketchSum}} in Sketching, {{drawSum}} in Drawing and {{paintSum}} in Painting. </p>-->
           
             </div>
         </div>
@@ -181,18 +183,22 @@
                     this.errors.push('Select a valid date, today or in the past.')
                  }
 
+                //is the hours valid? is it 0 to 24?
                 if (this.hours <= 0 || this.hours > 24){
                     this.errors.push('The number of hours must be greater than 0 and less than or equal to 24')
                 }
 
+                //is type selected?
                 if(!this.type) {
                     this.errors.push('Select a type')
                 }
 
+                //is medium selected?
                 if(!this.medium) {
                     this.errors.push('Select a medium')
                 }
 
+                //any error doesn't exits? display the data to the table.
                 if (this.errors.length === 0) {
                     let record = {
                         date: date,
@@ -205,7 +211,6 @@
                     this.activityRecords.push(record)
 
                     //sort the activity records
-
                     this.activityRecords.sort(function (r1, r2) {
                         //sort with oldest records first, most recent at the end
                         return r1.date.getTime() - r2.date.getTime()
@@ -218,39 +223,66 @@
                 return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
             },
 
-            sketchOrDrawOrPaint(record){
-
-            },
-
-            completedOrNot(type) {
-                if (this.type){
+            //is completed checked, display 'Completed' else 'Not Completed'
+            completedOrNot(completed) {
+                if (completed){
                     return 'Completed'
                 } else {
                     return 'Not Completed'
                 }
+            },
+
+            //Display string less than 40 characters in the table, but the whole notes will be saved inside the app
+            notesShorten(notes){
+                if(notes.length >40) {
+                    return notes.substring(0, 40)+'...'
+                } else {
+                    return notes
+                }
             }
         },
         computed: {
+            //count total records
             totalRecords() {
-
                 let numberOfRecords = this.activityRecords.length
-                if ( numberOfRecords === 1) {
+                if (numberOfRecords === 1) {
                     return '1 record'
                 } else {
                     return numberOfRecords + ' records'
                 }
             },
-            totalHours () {
+            //count total hours of activity
+            totalHours() {
                 let total = 0
                 this.activityRecords.forEach(function (record) {
                     total = total + record.hours
                 })
-                 if (total <= 1){
-                     return total + ' hour'
-                 } else {
-                     return total + ' hours'
-                 }
-            }
+                if (total <= 1) {
+                    return total + ' hour'
+                } else {
+                    return total + ' hours'
+                }
+            },
+//Total for individual record type
+            // sketchTotal() {
+            //     let sketchSum = 0
+            //     let drawSum = 0
+            //     let paintSum = 0
+            //     this.activityRecords.forEach(function (record) {
+            //         if (record.type === 'Sketching') {
+            //             sketchSum = sketchSum + record.hours
+            //             return sketchSum + 'hours'
+            //         }
+            //         if (record.type === 'Drawing') {
+            //             drawSum = drawSum + record.hours
+            //             return drawSum + ' hours'
+            //         }
+            //         if (record.type === 'Painting') {
+            //             paintSum = paintSum + record.hours
+            //             return paintSum + 'hours'
+            //         }
+            //     })
+            // }
         }
     })
 
