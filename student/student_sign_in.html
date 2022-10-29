@@ -15,9 +15,7 @@
 
         <!-- show errors from form validation -->
         <div class="alert alert-danger" v-if="errors.length > 0">
-            <ul>
-                <li v-for="error in errors">{{error}}</li>
-            </ul>
+            <li v-for="error in errors" v-bind:key="error">{{error}}</li>
         </div>
 
 
